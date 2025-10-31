@@ -1,0 +1,69 @@
+<table
+  mat-table
+  [dataSource]="dataSource"
+   matSort
+  class="generic-table"
+>
+  
+  @for (head of tableHeading; track $index) {
+    <ng-container [matColumnDef]="head.key">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        [mat-sort-header]="enableSorting ? head.key : ''"
+      >
+        {{ head.label }}
+      </th>
+
+      <td mat-cell *matCellDef="let data">
+      
+        @if (head.key === 'profilePhoto' && data[head.key]) {
+          <img
+            [src]="data[head.key]"
+            width="50"
+            height="50"
+            alt="Profile Photo"
+          />
+        }
+
+  
+        @if (head.key !== 'profilePhoto') {
+          {{ data[head.key] }}
+        }
+      </td>
+    </ng-container>
+  }
+
+  
+  @if (showActions) {
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let data">
+        @for (action of actions; track $index) {
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="onActionClicked(action.type, data, $event)"
+          >
+            {{ action.label }}
+          </button>
+        }
+      </td>
+    </ng-container>
+  }
+
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+
+
+@if (enablePagination) {
+  <mat-paginator
+    [pageSizeOptions]="[2, 3,5 ]"
+    showFirstLastButtons
+  ></mat-paginator>
+}
+<div *ngIf="!dataSource.data || dataSource.data.length === 0" class="no-data">
+  No data found.
+</div>
