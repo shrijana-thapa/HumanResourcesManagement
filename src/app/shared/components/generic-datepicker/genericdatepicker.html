@@ -1,0 +1,20 @@
+@if (control) {
+  <mat-form-field appearance="fill" class="input-field">
+    <mat-label>{{ label }}</mat-label>
+
+    <input
+      matInput
+      [matDatepicker]="picker"
+      [formControl]="control"
+      [placeholder]="placeholder"
+      (dateChange)="dateChanged.emit($event.value)"
+    />
+
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+
+    @if (control.invalid && (control.dirty || control.touched)) {
+      <mat-error>{{ getErrorMessage() }}</mat-error>
+    }
+  </mat-form-field>
+}

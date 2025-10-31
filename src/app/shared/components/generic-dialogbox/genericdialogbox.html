@@ -1,0 +1,36 @@
+@if (config.title) {
+  <h2 mat-dialog-title>{{ config.title }}</h2>
+}
+
+<mat-dialog-content>
+  @if (config.message) {
+    <ng-container>
+      {{ config.message }}
+    </ng-container>
+  }
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  @if (config.showCancelButton) {
+    <button
+      mat-stroked-button
+      [color]="config.cancelColor || 'warn'"
+      (click)="onCancel()"
+    >
+      {{ config.cancelButtonText || 'Cancel' }}
+    </button>
+  }
+
+  @if (config.showConfirmButton) {
+    <button
+      mat-flat-button
+      [color]="config.confirmColor || 'primary'"
+      (click)="onConfirm()"
+    >
+      {{ config.confirmButtonText || 'Confirm' }}
+    </button>
+  }
+
+</mat-dialog-actions>
