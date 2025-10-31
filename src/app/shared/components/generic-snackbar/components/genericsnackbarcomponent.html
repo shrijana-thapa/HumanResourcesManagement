@@ -1,0 +1,13 @@
+<div  class="snackbar-container" [ngClass]="data.type">
+  <span class="icon">
+        @if (data.type === 'success') { ✔ }
+    @if (data.type === 'error') { ✖ }
+    @if (data.type === 'warning') { ⚠ }
+  </span>
+<span class="message">
+  {{data.message}}
+</span>
+  <button class="close-btn" (click)="close()">
+    ✖
+  </button>
+</div>
