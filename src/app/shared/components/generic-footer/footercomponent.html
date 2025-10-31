@@ -1,0 +1,17 @@
+<footer class="footer">
+  <div class="footer-left">
+  &copy;{{year}} {{companyName}}.All rights reserved.
+  </div>
+  @if(links.length){
+  <div class="footer-right">
+   <ul>
+    @for ( link of links;track link.url) {
+    <li>
+    <a [href]="link.url" > {{link.label}}</a>
+    </li>
+  }
+   </ul>
+  </div>
+  }
+
+</footer>
