@@ -1,0 +1,26 @@
+
+<app-headercomponent
+[title]="pageTitle"
+[userName]="currentUserName"
+(logout)="handleLogout()"
+(toggleSidebar)="toggleSidebar()"
+>
+</app-headercomponent>
+
+<div class="layout">
+
+  <app-sidenavbarcomponent
+  [menuItems]="sidebarItems"
+  [collapsed]="!showSidebar"
+  >
+  </app-sidenavbarcomponent>
+<div class="content-wrapper" [class.expanded]="!showSidebar">
+  <main class="main-content">
+    <router-outlet>
+
+    </router-outlet>
+  </main>
+<app-footercomponent></app-footercomponent>
+</div>
+
+</div>
