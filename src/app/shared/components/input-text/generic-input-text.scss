@@ -1,0 +1,18 @@
+.input-field {
+  width: 100%;
+  margin-bottom: 1rem;
+
+  mat-label {
+    font-weight: 500;
+    color: #333;
+  }
+
+  input {
+    font-size: 1rem;
+  }
+
+  mat-error {
+    font-size: 0.85rem;
+    color: #e53935;
+  }
+}
