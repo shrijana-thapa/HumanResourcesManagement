@@ -1,0 +1,16 @@
+<mat-form-field apperance="fill" class="input-field">
+  <mat-label>{{label}}</mat-label>
+  <input matInput 
+  appOnlyNumericValue
+  type="text"
+  [placeholder]="placeholder"
+  [formControl]="control"
+  [allowDecimal]="allowDecimal">
+
+    @if(control.hasError('required')){
+     <mat-error> {{label}} is required</mat-error>
+    }
+    @if(control.hasError('min')){
+     <mat-error> Minimum {{label}} is {{min}}</mat-error>
+    }
+</mat-form-field>
