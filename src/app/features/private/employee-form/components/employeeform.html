@@ -1,0 +1,163 @@
+<div appAutoFocusFirstInput class="employee-form-wrapper">
+  <form
+    class="employee-form single-column"
+    [formGroup]="formService.form!"
+    (ngSubmit)="onSubmit()"
+    [appAutoFocusFirstInvalidInput]="formService.form!"
+  >
+    <h2 class="form-title">Add New Employee</h2>
+
+    <div class="form-section">
+      <app-generic-input-text
+        [label]="'Name'"
+        [type]="'text'"
+        [placeholder]="'Enter full name'"
+        [control]="formService.nameControl!"
+      ></app-generic-input-text>
+
+      <app-generic-input-text
+        [label]="'Email'"
+        [type]="'email'"
+        [placeholder]="'Enter email address'"
+        [control]="formService.emailControl!"
+      ></app-generic-input-text>
+
+      <app-generic-input-text
+        [label]="'Role'"
+        [type]="'text'"
+        [placeholder]="'Enter role'"
+        [control]="formService.roleControl!"
+      ></app-generic-input-text>
+
+      <app-generic-input-text
+        [label]="'Department'"
+        [type]="'text'"
+        [placeholder]="'Enter department'"
+        [control]="formService.departmentControl!"
+      ></app-generic-input-text>
+
+      <app-generic-inputNumber
+        [label]="'Salary'"
+        [placeholder]="'Enter salary'"
+        [control]="formService.salaryControl!"
+        [allowDecimal]="true"
+      ></app-generic-inputNumber>
+
+      <app-generic-datepicker
+        [label]="'Joining Date'"
+        [placeholder]="'Select Joining Date'"
+        [control]="formService.joiningDateControl!"
+        (dateChanged)="onDateChange($event)"
+      ></app-generic-datepicker>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="">Select status</mat-option>
+          <mat-option value="Active">Active</mat-option>
+          <mat-option value="Inactive">Inactive</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+  
+   
+
+    <div class="form-section">
+      <h3>Skills</h3>
+      <div formArrayName="skills" class="dynamic-list">
+        <div *ngFor="let skill of formService.skills.controls; let i = index" [formGroupName]="i" class="dynamic-row">
+          <app-generic-input-text
+            [label]="'Skill Name'"
+            [type]="'text'"
+            [placeholder]="'Enter skill name'"
+            [control]="formService.getSkillNameControl(skill)"
+          ></app-generic-input-text>
+
+          <app-generic-inputNumber
+            [label]="'Experience (Years)'"
+            [placeholder]="'Enter experience'"
+            [control]="formService.getSkillExperienceControl(skill)"
+            [allowDecimal]="true"
+          ></app-generic-inputNumber>
+
+          <app-generic-inputselect
+            [label]="'Skill Level'"
+            [placeholder]="'Select level'"
+            [options]="formService.skillLevels"
+            [control]="formService.getSkillLevelControl(skill)"
+          ></app-generic-inputselect>
+
+          <button mat-icon-button color="warn" type="button" (click)="formService.removeSkills(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <button mat-stroked-button color="primary" type="button" (click)="formService.addSkills()">
+          + Add Skill
+        </button>
+      </div>
+    </div>
+
+  
+    <div class="form-section">
+      <h3>Income Details</h3>
+      <div formArrayName="incomes" class="dynamic-list">
+        <div *ngFor="let income of formService.incomes.controls; let i = index" [formGroupName]="i" class="dynamic-row">
+          <app-generic-inputselect
+            [label]="'Frequency'"
+            [placeholder]="'Select frequency'"
+            [options]="formService.getAvailableFrequencyOptions(i)"
+            [control]="formService.getAmountFrequencyControl(income)"
+          ></app-generic-inputselect>
+
+          <app-generic-inputselect
+            [label]="'Interval'"
+            [placeholder]="'Select interval'"
+            [options]="formService.getAvailableIntervalsOptions(i)"
+            [control]="formService.getAmountIntervalControl(income)"
+          ></app-generic-inputselect>
+
+          <app-generic-inputNumber
+            [label]="'Amount'"
+            [placeholder]="'Enter amount'"
+            [control]="formService.getAmountValueControl(income)"
+            [allowDecimal]="true"
+          ></app-generic-inputNumber>
+       <div class="error-message" *ngIf="formService.getIncomeErrorMessage(i)">
+      {{ formService.getIncomeErrorMessage(i) }}
+    </div>
+          <button mat-icon-button color="warn" type="button" (click)="formService.removeAmount(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+
+        <button mat-stroked-button color="primary" type="button" (click)="formService.addAmount()">
+          + Add Amount
+        </button>
+      </div>
+    </div>
+
+     <div class="form-section">
+      <h3>Profile Photo</h3>
+      <div class="photo-upload">
+        <input type="file" id="profilePhoto" accept=".png" (change)="onFileSelected($event)" />
+        <div *ngIf="formService.profilePhotoControl?.hasError('invalidType')" class="error">
+          Only PNG files are allowed.
+        </div>
+        <div *ngIf="formService.profilePhotoControl?.hasError('fileTooLarge')" class="error">
+          File size must be less than 3 MB.
+        </div>
+
+        <div *ngIf="previewUrl" class="preview">
+          <img [src]="previewUrl" alt="Profile Preview" />
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-actions">
+      <button mat-raised-button color="primary" type="submit" class="submit-btn">
+        Add Employee
+      </button>
+    </div>
+  </form>
+</div>
