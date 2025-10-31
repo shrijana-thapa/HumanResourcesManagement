@@ -13,8 +13,8 @@ export class EmployeeService {
   getEmployee(): Observable<EMPLOYEE[]> {
     return this.http.get<EMPLOYEE[]>(this.apiUrlEmployee);
   }
-  getEmployeeById(id: number) {
-    return this.http.get(`${this.apiUrlEmployee}/${id}`);
+  getEmployeeById(id: number): Observable<EMPLOYEE> {
+    return this.http.get<EMPLOYEE>(`${this.apiUrlEmployee}/${id}`);
   }
   addEmployee(employee: EMPLOYEE, file?: File): Observable<EMPLOYEE> {
     return this.http.post<EMPLOYEE>(this.apiUrlEmployee, employee);

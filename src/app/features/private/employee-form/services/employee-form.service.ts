@@ -11,6 +11,7 @@ import { BaseFormService } from 'app/core/services/base-form-services/base-form-
 import { EMPLOYEE } from 'app/shared/model/employees-model';
 import { pngFileValidator, sizeFileValidator } from '../file-validators/file-validators';
 import { AmountValidator } from 'app/core/validators/amount-validator';
+import { patchFormArray } from '@utils/form-array-utils';
 type OptionType = { value: string | number; label: string };
 @Injectable({
   providedIn: 'root',
@@ -170,5 +171,16 @@ export class EmployeeFormService extends BaseFormService {
   }
   getAmountValueControl(income: AbstractControl): FormControl {
     return income.get('amount') as FormControl;
+  }
+
+  patchEmployeeForm(employee: EMPLOYEE) {
+    if (!employee || !this.form) return;
+    this.form.patchValue(employee);
+    if (employee.skills) {
+      patchFormArray(this.skills, employee.skills, this.createSkills.bind(this));
+    }
+    if (employee.incomes) {
+      patchFormArray(this.incomes, employee.incomes, this.createAmount.bind(this));
+    }
   }
 }

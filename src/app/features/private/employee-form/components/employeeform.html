@@ -5,7 +5,7 @@
     (ngSubmit)="onSubmit()"
     [appAutoFocusFirstInvalidInput]="formService.form!"
   >
-    <h2 class="form-title">Add New Employee</h2>
+    <h2 class="form-title">{{ isEditMode ? 'Edit Employee' : 'Add New Employee' }}</h2>
 
     <div class="form-section">
       <app-generic-input-text
@@ -156,7 +156,7 @@
     
     <div class="form-actions">
       <button mat-raised-button color="primary" type="submit" class="submit-btn">
-        Add Employee
+          {{ isEditMode ? 'Update Employee' : 'Add Employee' }}
       </button>
     </div>
   </form>

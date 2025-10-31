@@ -3,8 +3,9 @@ import { EmployeeFormService } from '../services/employee-form.service';
 import { EMPLOYEE } from 'app/shared/model/employees-model';
 import { EmployeeService } from 'app/core/services/employee-services/employee-service';
 import { TranslateService } from '@ngx-translate/core';
-import { AmountValidator } from 'app/core/validators/amount-validator';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+
 @Component({
   selector: 'app-employeeform',
   standalone: false,
@@ -14,18 +15,37 @@ import { MatDialog } from '@angular/material/dialog';
 export class EmployeeFormComponent implements OnInit {
   previewUrl: string | null = '';
   selectedFile: File | null = null;
-  employee: any;
+  employee: EMPLOYEE | null = null;
+  isEditMode = false;
 
   constructor(
     public formService: EmployeeFormService,
     private employeeService: EmployeeService,
     private translate: TranslateService,
     private cdr: ChangeDetectorRef,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.formService.initForm(); // Build form
+    this.formService.initForm();
+
+    this.route.params.subscribe((params) => {
+      const id = params['id'];
+      if (id) {
+        this.isEditMode = true;
+        this.employeeService.getEmployeeById(id).subscribe({
+          next: (employee: EMPLOYEE) => {
+            this.employee = employee;
+            this.formService.patchEmployeeForm(employee);
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error(err),
+        });
+      }
+    });
+
     this.formService.incomes.valueChanges.subscribe(() => {
       this.formService.incomes.updateValueAndValidity({ onlySelf: true, emitEvent: false });
     });
@@ -34,33 +54,52 @@ export class EmployeeFormComponent implements OnInit {
   onDateChange(date: Date) {
     console.log('Selected date:', date);
   }
+
   onSubmit() {
     if (this.formService.checkInvalidStatus()) return;
 
     const formData: EMPLOYEE = this.formService.getFormValue();
 
+    const save = () => {
+      if (this.isEditMode && this.employee) {
+        formData.id = this.employee.id;
+        return this.employeeService.updateEmployee(formData);
+      } else {
+        return this.employeeService.addEmployee(formData);
+      }
+    };
+    save();
+
     if (this.selectedFile) {
       const reader = new FileReader();
       reader.onload = () => {
         formData.profilePhoto = reader.result as string;
-        this.employeeService.addEmployee(formData).subscribe({
+
+        save().subscribe({
           next: () => {
-            console.log(' Employee added successfully with photo!');
-            this.formService.reset();
-            this.previewUrl = null;
-            this.selectedFile = null;
+            console.log('Employee saved successfully with photo!');
+            this.resetForm();
           },
-          error: (err) => console.error(' Error adding employee:', err),
+          error: (err) => console.error('Error saving employee:', err),
         });
       };
-
       reader.readAsDataURL(this.selectedFile);
     } else {
-      this.employeeService.addEmployee(formData).subscribe({
-        next: () => console.log(' Employee added successfully (no photo)'),
-        error: (err) => console.error('Error adding employee:', err),
+      save().subscribe({
+        next: () => {
+          console.log('Employee saved successfully (no photo)');
+          this.resetForm();
+        },
+        error: (err) => console.error('Error saving employee:', err),
       });
     }
+  }
+
+  resetForm() {
+    this.formService.reset();
+    this.previewUrl = null;
+    this.selectedFile = null;
+    this.router.navigate(['/employees']);
   }
 
   onFileSelected(event: Event) {
