@@ -1,0 +1,28 @@
+<div class="dashboard-container space-y-4">
+  <div class="empfilter">
+       <button mat-raised-button color="primary" [routerLink]="['/addForm']">
+         {{ 'ADD_EMPLOYEE' | translate }}
+  </button>
+
+  <app-filter-component
+  (filterChanged)="onFilterChanged($event)">
+  </app-filter-component>
+  </div>
+ 
+<div>
+    <app-generictablecomponent
+[tableHeading]="tableHeading"
+[tableData]="(filteredTableData$|async)|| []"
+[actions]="actions"
+[showActions]="showActions"
+(actionClicked)="onActionTable($event)"
+[enablePagination]="true"
+[enableSorting]="true"
+>
+</app-generictablecomponent>
+
+</div>
+
+
+</div>
+
