@@ -1,0 +1,39 @@
+<button class="filter-btn" (click)="openModal()">
+  <mat-icon>tune</mat-icon>
+  Filter
+</button>
+
+@if (isModalOpen) {
+  <ng-container [ngTemplateOutlet]="modalTemplate"></ng-container>
+}
+
+<ng-template #modalTemplate>
+  <div class="modal-overlay">
+    <div class="modal-box">
+      <h3 class="modal-title">Apply Filter</h3>
+
+      <app-generic-inputselect
+        [label]="'Department'"
+        [options]="departmentOptions"
+        [control]="departmentControl"
+      ></app-generic-inputselect>
+
+      <app-generic-inputselect
+        [label]="'Role'"
+        [options]="roleOptions"
+        [control]="roleControl"
+      ></app-generic-inputselect>
+
+      <app-generic-inputselect
+        [label]="'Status'"
+        [options]="statusOptions"
+        [control]="statusControl"
+      ></app-generic-inputselect>
+
+      <div class="modal-actions">
+        <button mat-stroked-button color="warn" (click)="resetFilters()">Reset</button>
+        <button mat-flat-button color="primary" (click)="applyFilters()">Apply</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
