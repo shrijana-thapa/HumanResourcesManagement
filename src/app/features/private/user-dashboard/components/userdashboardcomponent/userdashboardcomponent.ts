@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, pipe, map } from 'rxjs';
 import { combineLatestWith } from 'rxjs';
 import { EMPLOYEE } from '../../../../../shared/model/employees-model';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-userdashboardcomponent',
@@ -20,7 +21,11 @@ export class UserDashboardComponent implements OnInit {
     status?: string | null;
   }>({});
 
-  constructor(private employeeService: DashboardService, private translate: TranslateService) {
+  constructor(
+    private employeeService: DashboardService,
+    private translate: TranslateService,
+    private router: Router
+  ) {
     translate.addLangs(['en', 'ne']);
     translate.setDefaultLang('en');
     translate.use('ne');
@@ -70,7 +75,12 @@ export class UserDashboardComponent implements OnInit {
     if (event.action == 'delete') {
     }
     if (event.action == 'update') {
-      alert(`Updating ${event.data.name}`);
+      const employeeId = event.data.id;
+      if (employeeId) {
+        this.router.navigate([`/addForm/edit/${employeeId}`]);
+      } else {
+        console.error('Employee ID not found!');
+      }
     }
   }
   //filter
