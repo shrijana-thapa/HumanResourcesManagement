@@ -8,9 +8,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { MaterialModule } from 'app/shared/material-module/material-module';
 import { provideTranslateService, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
-import { Cardcomponent } from './shared/components/card-component/cardcomponent';
 @NgModule({
-  declarations: [App, Cardcomponent],
+  declarations: [App],
   imports: [BrowserModule, AppRoutingModule, RouterModule, MaterialModule, TranslateModule],
   providers: [
     provideHttpClient(),

@@ -5,6 +5,10 @@ import { EmployeeService } from 'app/core/services/employee-services/employee-se
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { canComponentDeactivate } from 'app/core/guards/forms/employee-form-deactivate-guard';
+import { GenericDialogComponent } from 'app/shared/components/generic-dialogbox/genericdialogbox';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-employeeform',
@@ -12,11 +16,12 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './employeeform.html',
   styleUrls: ['./employeeform.scss'],
 })
-export class EmployeeFormComponent implements OnInit {
+export class EmployeeFormComponent implements OnInit, canComponentDeactivate {
   previewUrl: string | null = '';
   selectedFile: File | null = null;
   employee: EMPLOYEE | null = null;
   isEditMode = false;
+  private formInitialized = false;
 
   constructor(
     public formService: EmployeeFormService,
@@ -29,7 +34,10 @@ export class EmployeeFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.formService.initForm();
+    if (!this.formInitialized) {
+      this.formService.initForm();
+      this.formInitialized = true;
+    }
 
     this.route.params.subscribe((params) => {
       const id = params['id'];
@@ -60,22 +68,17 @@ export class EmployeeFormComponent implements OnInit {
 
     const formData: EMPLOYEE = this.formService.getFormValue();
 
-    const save = () => {
-      if (this.isEditMode && this.employee) {
-        formData.id = this.employee.id;
-        return this.employeeService.updateEmployee(formData);
-      } else {
-        return this.employeeService.addEmployee(formData);
-      }
-    };
-    save();
+    const save$ =
+      this.isEditMode && this.employee
+        ? this.employeeService.updateEmployee({ ...formData, id: this.employee.id })
+        : this.employeeService.addEmployee(formData);
 
     if (this.selectedFile) {
       const reader = new FileReader();
       reader.onload = () => {
         formData.profilePhoto = reader.result as string;
 
-        save().subscribe({
+        save$.subscribe({
           next: () => {
             console.log('Employee saved successfully with photo!');
             this.resetForm();
@@ -85,7 +88,7 @@ export class EmployeeFormComponent implements OnInit {
       };
       reader.readAsDataURL(this.selectedFile);
     } else {
-      save().subscribe({
+      save$.subscribe({
         next: () => {
           console.log('Employee saved successfully (no photo)');
           this.resetForm();
@@ -94,7 +97,6 @@ export class EmployeeFormComponent implements OnInit {
       });
     }
   }
-
   resetForm() {
     this.formService.reset();
     this.previewUrl = null;
@@ -126,5 +128,26 @@ export class EmployeeFormComponent implements OnInit {
   }
   switchLanguage(lang: string) {
     this.translate.use(lang);
+  }
+  canDeactivate(): boolean | Observable<boolean> {
+    if (!this.formService.form?.dirty) {
+      return true;
+    }
+    const dialogRef = this.dialog.open(GenericDialogComponent, {
+      data: {
+        title: 'Unsaved Changes',
+        message: 'You have unsaved changes! Do you really want to leave this page without saving?',
+        showCancelButton: true,
+        showConfirmButton: true,
+        cancelButtonText: 'Stay',
+        confirmButtonText: 'Leave',
+      },
+    });
+
+    return dialogRef.afterClosed().pipe(
+      map((result) => {
+        return !!result;
+      })
+    );
   }
 }

@@ -104,7 +104,7 @@ export class EmployeeFormService extends BaseFormService {
   createSkills(): FormGroup {
     return this.formBuilder.group({
       skillName: ['', Validators.required],
-      experience: ['', Validators.required, Validators.min(0)],
+      experience: ['', [Validators.required, Validators.min(0)]],
       level: ['', Validators.required],
     });
   }
