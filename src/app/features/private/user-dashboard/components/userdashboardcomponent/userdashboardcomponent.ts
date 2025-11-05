@@ -1,10 +1,13 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { DashboardService } from '../../services/dashboard-service';
 import { BehaviorSubject, Observable, pipe, map } from 'rxjs';
 import { combineLatestWith } from 'rxjs';
 import { EMPLOYEE } from '../../../../../shared/model/employees-model';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
+import { EmployeeService } from 'app/core/services/employee-services/employee-service';
+import { MatDialog } from '@angular/material/dialog';
+import { GenericDialogComponent } from 'app/shared/components/generic-dialogbox/genericdialogbox';
+import { GenericSnackbarServices } from 'app/shared/components/generic-snackbar/services/genericsnackbarservices';
 
 @Component({
   selector: 'app-userdashboardcomponent',
@@ -22,9 +25,11 @@ export class UserDashboardComponent implements OnInit {
   }>({});
 
   constructor(
-    private employeeService: DashboardService,
+    private employeeService: EmployeeService,
     private translate: TranslateService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
+    private snackbarService: GenericSnackbarServices
   ) {
     translate.addLangs(['en', 'ne']);
     translate.setDefaultLang('en');
@@ -32,7 +37,11 @@ export class UserDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.tableData$ = this.employeeService.getEmployees();
+    this.loadEmployees();
+  }
+
+  private loadEmployees() {
+    this.tableData$ = this.employeeService.getEmployee();
 
     //filter logic
     this.filteredTableData$ = this.tableData$.pipe(
@@ -67,20 +76,25 @@ export class UserDashboardComponent implements OnInit {
     { type: 'update', label: 'Update' },
     { type: 'delete', label: 'Delete' },
   ];
+
   onActionTable(event: { action: string; data: any }) {
-    console.log('action is clicked', event);
-    if (event.action == 'view') {
-      alert(`Viewing ${event.data.name}`);
-    }
-    if (event.action == 'delete') {
-    }
-    if (event.action == 'update') {
-      const employeeId = event.data.id;
-      if (employeeId) {
-        this.router.navigate([`/addForm/edit/${employeeId}`]);
-      } else {
-        console.error('Employee ID not found!');
-      }
+    const employeeId = event.data.id;
+    const employeeName = event.data.name;
+
+    switch (event.action) {
+      case 'view':
+        alert(`Viewing ${event.data.name}`);
+        this.router.navigate([`/addForm/view/${employeeId}`]);
+        break;
+      case 'delete':
+        this.deleteEmployee(employeeId, employeeName);
+        break;
+      case 'update':
+        if (employeeId) {
+          this.router.navigate([`/addForm/edit/${employeeId}`]);
+        } else {
+          console.error('Employee ID not found!');
+        }
     }
   }
   //filter
@@ -91,5 +105,32 @@ export class UserDashboardComponent implements OnInit {
   }) {
     console.log('filter value arrived');
     this.filterValue$.next(filteredValue);
+  }
+  deleteEmployee(employeeId: number, employeeName: string) {
+    const dialogRef = this.dialog.open(GenericDialogComponent, {
+      data: {
+        title: 'Delete Employee',
+        message: 'Are you sure you want to delete ${employeeName}?',
+        showCancelButton: true,
+        showConfirmButton: true,
+        cancelButtonText: 'Cancel',
+        confirmButtonText: 'Delete',
+      },
+    });
+    dialogRef.afterClosed().pipe(
+      map((confirmed) => {
+        if (confirmed) {
+          this.employeeService.deleteEmployeeById(employeeId).subscribe({
+            next: () => {
+              this.snackbarService.success(`Successfuly Deleted ${employeeName}`);
+              this.loadEmployees();
+            },
+            error: () => {
+              this.snackbarService.error('Failed to delete employee. Please try again.');
+            },
+          });
+        }
+      })
+    );
   }
 }

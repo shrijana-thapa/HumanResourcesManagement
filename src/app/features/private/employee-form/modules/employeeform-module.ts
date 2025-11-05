@@ -13,9 +13,11 @@ import { GenericInputSelect } from 'app/shared/components/generic-select/generic
 import { AutoFocusFirstInputDirective } from 'app/shared/directives/auto-focus-firstinput/auto-focus';
 import { AutoFocusFirstInvalidInputDirective } from 'app/shared/directives/auto-focus-firstinvalid/autofocusfirstinvalidinput';
 import { TranslateModule } from '@ngx-translate/core';
+import { Cardcomponent } from 'app/shared/components/card-component/cardcomponent';
+import { EmployeeDetailsComponent } from '../../employee-details/employeedetails-component';
 
 @NgModule({
-  declarations: [EmployeeFormComponent],
+  declarations: [EmployeeFormComponent, EmployeeDetailsComponent],
   imports: [
     CommonModule,
     EmployeeformRoutingModule,
@@ -29,6 +31,7 @@ import { TranslateModule } from '@ngx-translate/core';
     AutoFocusFirstInputDirective,
     AutoFocusFirstInvalidInputDirective,
     TranslateModule,
+    Cardcomponent,
   ],
 })
 export class EmployeeformModule {}
