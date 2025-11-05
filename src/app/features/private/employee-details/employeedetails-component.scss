@@ -1,0 +1,42 @@
+.details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.profile-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+
+  .profile-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.info-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  font-size: 1rem;
+  color: #333;
+
+  .detail-row {
+    display: flex;
+    flex-direction: column;
+
+    strong {
+      color: #444;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}

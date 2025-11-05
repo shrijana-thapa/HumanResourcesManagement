@@ -1,0 +1,24 @@
+<app-cardcomponent title="Employee Details">
+  <div *ngIf="employee; else loading" class="details-container" >
+    <div class="profile-section">
+      <img *ngIf="employee.profilePhoto"
+      [src]="employee.profilePhoto"
+      [alt]="employee.name"
+      class="profile-photo"
+      />
+    </div>
+         <div class="info-section">
+      <div class="detail-row"><strong>Name:</strong> {{ employee.name }}</div>
+      <div class="detail-row"><strong>Email:</strong> {{ employee.email }}</div>
+      <div class="detail-row"><strong>Role:</strong> {{ employee.role }}</div>
+      <div class="detail-row"><strong>Department:</strong> {{ employee.department }}</div>
+      <div class="detail-row"><strong>Status:</strong> {{ employee.status }}</div>
+      <div class="detail-row"><strong>Salary:</strong> {{ employee.salary }}</div>
+      <div class="detail-row"><strong>Joining Date:</strong> {{ employee.joiningDate | date }}</div>
+    </div>
+  </div>
+  <ng-template #loading>
+    <p>Loading employee details...</p>
+  </ng-template>
+
+</app-cardcomponent>
