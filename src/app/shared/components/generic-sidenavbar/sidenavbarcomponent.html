@@ -3,11 +3,11 @@
     @for(item of menuItems;track item.route){
     <li [class.active]="isActive(item.route)">
       @if(item.route){
-     <a   [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"]> 
+     <a   [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"> 
       @if(item.icon){
         <mat-icon>{{item.icon}}</mat-icon>
         @if(!collapsed){
-        <mat-label>{{item.label}}</mat-label>
+    <span class="sidebar-label">{{ item.label }}</span>
         }
       }
     </a>

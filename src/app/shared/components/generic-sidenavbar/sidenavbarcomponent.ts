@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material-module/material-module';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 interface menuItem {
   label: string;
   route?: string;
@@ -12,7 +14,7 @@ interface menuItem {
   standalone: true,
   templateUrl: './sidenavbarcomponent.html',
   styleUrl: './sidenavbarcomponent.scss',
-  imports: [RouterModule, MaterialModule],
+  imports: [RouterModule, MaterialModule, MatIconModule, CommonModule],
 })
 export class SidenavbarComponent {
   @Input() menuItems: menuItem[] = [];
