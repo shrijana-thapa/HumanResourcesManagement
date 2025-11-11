@@ -1,21 +1,9 @@
-/* ===== Layout Wrapper ===== */
 .layout {
   display: flex;
   flex-direction: row;
   height: 100vh;
   overflow: hidden; /* avoid double scrollbars */
   padding-top: 60px; /* space for fixed header */
-}
-
-/* ===== Sidebar (inside layout) ===== */
-app-sidenavbarcomponent {
-  flex-shrink: 0;
-  width: 220px;
-  transition: width 0.3s ease, transform 0.3s ease;
-}
-
-app-sidenavbarcomponent[collapsed="true"] {
-  width: 60px;
 }
 
 /* ===== Content Wrapper ===== */
