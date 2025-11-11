@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MaterialModule } from '../../../shared/material-module/material-module';
 import { HeaderComponent } from '../../../shared/components/generic-header/headercomponent';
 import { SidenavbarComponent } from '../../../shared/components/generic-sidenavbar/sidenavbarcomponent';
-import { FooterComponent } from '../../../shared/components/generic-footer/footercomponent';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 interface MenuItem {
   label: string;
   route?: string;
@@ -15,17 +14,17 @@ interface MenuItem {
   standalone: true,
   templateUrl: './wrapper-layoutcomponent.html',
   styleUrl: './wrapper-layoutcomponent.scss',
-  imports: [MaterialModule, RouterModule, HeaderComponent, SidenavbarComponent, FooterComponent],
+  imports: [MaterialModule, RouterModule, HeaderComponent, SidenavbarComponent],
 })
 export class WrapperLayoutComponent implements OnInit {
   pageTitle: string = 'HRM System';
   currentUserName: string = 'shri';
   showSidebar: boolean = true;
   sidebarItems: MenuItem[] = [];
+  constructor(private router: Router) {}
   // this.authservice.getUserName();
   handleLogout() {
-    // this.authService.logout();
-    // this.router.navigate(['/login']);
+    this.router.navigate(['/login']);
   }
   toggleSidebar() {
     this.showSidebar = !this.showSidebar;
