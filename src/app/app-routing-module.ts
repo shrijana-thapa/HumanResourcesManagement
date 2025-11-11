@@ -17,6 +17,19 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'app',
+    component: WrapperLayoutComponent,
+    children: [
+      {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('../app/features/private/user-dashboard/modules/userdashboard-module').then(
+            (m) => m.UserdashboardModule
+          ),
+      },
+    ],
+  },
+  {
     path: 'addForm',
     loadChildren: () =>
       import('../app/features/private/employee-form/modules/employeeform-module').then(
