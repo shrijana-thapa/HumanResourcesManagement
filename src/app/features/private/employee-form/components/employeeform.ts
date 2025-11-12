@@ -9,6 +9,7 @@ import { Location } from '@angular/common';
 import { canComponentDeactivate } from 'app/core/guards/forms/employee-form-deactivate-guard';
 import { GenericDialogComponent } from 'app/shared/components/generic-dialogbox/genericdialogbox';
 import { map, Observable } from 'rxjs';
+import { GenericSnackbarServices } from 'app/shared/components/generic-snackbar/services/genericsnackbarservices';
 
 @Component({
   selector: 'app-employeeform',
@@ -30,7 +31,8 @@ export class EmployeeFormComponent implements OnInit, canComponentDeactivate {
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snackbarService: GenericSnackbarServices
   ) {}
 
   ngOnInit(): void {
@@ -80,20 +82,20 @@ export class EmployeeFormComponent implements OnInit, canComponentDeactivate {
 
         save$.subscribe({
           next: () => {
-            console.log('Employee saved successfully with photo!');
+            this.snackbarService.success('Employee saved successfully with photo!');
             this.resetForm();
           },
-          error: (err) => console.error('Error saving employee:', err),
+          error: (err) => this.snackbarService.error('Error saving employee,'),
         });
       };
       reader.readAsDataURL(this.selectedFile);
     } else {
       save$.subscribe({
         next: () => {
-          console.log('Employee saved successfully (no photo)');
+          this.snackbarService.success('Employee saved successfully (no photo)');
           this.resetForm();
         },
-        error: (err) => console.error('Error saving employee:', err),
+        error: (err) => this.snackbarService.error('Error saving employee:'),
       });
     }
   }

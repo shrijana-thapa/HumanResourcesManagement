@@ -83,7 +83,6 @@ export class UserDashboardComponent implements OnInit {
 
     switch (event.action) {
       case 'view':
-        alert(`Viewing ${event.data.name}`);
         this.router.navigate([`/addForm/view/${employeeId}`]);
         break;
       case 'delete':
@@ -110,27 +109,25 @@ export class UserDashboardComponent implements OnInit {
     const dialogRef = this.dialog.open(GenericDialogComponent, {
       data: {
         title: 'Delete Employee',
-        message: 'Are you sure you want to delete ${employeeName}?',
+        message: `Are you sure you want to delete ${employeeName}?`,
         showCancelButton: true,
         showConfirmButton: true,
         cancelButtonText: 'Cancel',
         confirmButtonText: 'Delete',
       },
     });
-    dialogRef.afterClosed().pipe(
-      map((confirmed) => {
-        if (confirmed) {
-          this.employeeService.deleteEmployeeById(employeeId).subscribe({
-            next: () => {
-              this.snackbarService.success(`Successfuly Deleted ${employeeName}`);
-              this.loadEmployees();
-            },
-            error: () => {
-              this.snackbarService.error('Failed to delete employee. Please try again.');
-            },
-          });
-        }
-      })
-    );
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.employeeService.deleteEmployeeById(employeeId).subscribe({
+          next: () => {
+            this.snackbarService.success(`Successfully Deleted ${employeeName}`);
+            this.loadEmployees();
+          },
+          error: () => {
+            this.snackbarService.error('Failed to delete employee. Please try again.');
+          },
+        });
+      }
+    });
   }
 }
