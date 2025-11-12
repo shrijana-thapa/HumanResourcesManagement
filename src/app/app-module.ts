@@ -15,7 +15,7 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
     provideHttpClient(),
     provideTranslateService({
       loader: provideTranslateHttpLoader({
-        prefix: './assets/i18n/',
+        prefix: '/assets/i18n/',
         suffix: '.json',
       }),
       fallbackLang: 'en',
