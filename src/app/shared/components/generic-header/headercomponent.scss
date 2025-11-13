@@ -1,11 +1,10 @@
-/* ===== Header ===== */
 .header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 60px;
-  background: #1976d2; /* Material blue */
+  background:transparent;
   color: #fff;
   display: flex;
   align-items: center;
@@ -13,58 +12,39 @@
   padding: 0 1rem;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   z-index: 1000;
+  transition: left 0.3s ease;
 }
-
-/* Toggle button (☰) */
 .header button {
   background: transparent;
   border: none;
-  color: #fff;
+  color:black;
   font-size: 1.5rem;
   cursor: pointer;
   margin-right: 1rem;
 }
-
-/* Left section (title) */
 .header-left {
   font-size: 1.25rem;
+  color:black;
   font-weight: 600;
-  flex: 1; /* takes available space */
+  flex: 1;
 }
-
-/* Right section (user + logout) */
 .header-right {
   display: flex;
   align-items: center;
   gap: 1rem;
+  color:black;
 }
 
 .header-right span {
   font-size: 0.95rem;
 }
-
-.header-right button {
-  background: #fff;
-  color: #1976d2;
-  border: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.header-right button:hover {
-  background: #f0f0f0;
-}
-
-/* ===== Responsive ===== */
 @media (max-width: 768px) {
   .header-left {
     font-size: 1rem;
   }
 
   .header-right span {
-    display: none; /* hide username on small screens */
+    display: none; 
   }
 
   .header-right button {
