@@ -1,18 +1,23 @@
-<aside class="sidebar" [class.collapsed]="collapsed">
-  <ul>
-    @for(item of menuItems;track item.route){
-    <li [class.active]="isActive(item.route)">
+<aside class="sidebar"   [class.open]="isSidebarOpen">
+  <nav class="menu">
+      @for(item of menuItems;track item.route){
       @if(item.route){
-     <a   [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"> 
+     <a class="menu-item"  [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"> 
       @if(item.icon){
         <mat-icon>{{item.icon}}</mat-icon>
-        @if(!collapsed){
-    <span class="sidebar-label">{{ item.label }}</span>
+        @if(isSidebarOpen && !isMobile){
+           <span class="label">{{ item.label }}</span>
         }
       }
     </a>
      }
-    </li>
   }
-  </ul>
+  </nav>
+  
+    <button mat-button class="logout-btn" (click)="onLogout()">
+      <mat-icon class="logout-icon">logout</mat-icon>
+      @if(isSidebarOpen && !isMobile) {
+        <span class="text-white">Logout</span>
+      }
+    </button>
 </aside>
