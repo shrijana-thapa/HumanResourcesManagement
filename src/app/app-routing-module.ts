@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { WrapperLayoutComponent } from './features/private/wrapper-component/wrapper-layoutcomponent';
+import { LayoutComponent } from './features/private/layout/layout-component';
 
 // app-routing.module.ts
 const routes: Routes = [
   { path: '', redirectTo: '', pathMatch: 'full' },
   {
     path: '',
-    component: WrapperLayoutComponent, // this is your authenticated layout
+    component: LayoutComponent,
   },
   {
     path: 'dashboard',
@@ -18,7 +18,7 @@ const routes: Routes = [
   },
   {
     path: 'app',
-    component: WrapperLayoutComponent,
+    component: LayoutComponent,
     children: [
       {
         path: 'dashboard',
