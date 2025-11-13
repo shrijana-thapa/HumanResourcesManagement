@@ -16,4 +16,9 @@
 .content-wrapper.expanded {
   margin-left: 60px;
 }
+@media (max-width: 768px) {
+  .content-wrapper {
+    margin-left: 0; 
+  }
+}
 

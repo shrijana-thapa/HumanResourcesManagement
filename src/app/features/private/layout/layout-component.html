@@ -13,7 +13,7 @@
   >
   </app-sidenavbarcomponent>
 
-<div class="content-wrapper">
+<div class="content-wrapper" [class.expanded]="!sidebar.isSidebarOpen && !sidebar.isMobile">
   <main class="main-content">
     <router-outlet>
 
